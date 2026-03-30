@@ -1,5 +1,3 @@
-"use client";
-
 import { memo } from "react";
 import {
   useReactTable,
@@ -15,7 +13,7 @@ import { processRowForExport } from "./usersTable.utils";
 import SearchBox from "./SearchBox";
 import SortDropdown from "./SortDropdown";
 import Pagination from "./Pagination";
-import { TableRow } from "@/app/page";
+import type { TableRow } from "@/src/App";
 import { useMockExpensiveRender } from "@/hooks/useMockExpensiveRender";
 
 const columnHelper = createColumnHelper<TableRow>();

@@ -1,14 +1,15 @@
-import { NextResponse } from "next/server";
+import type { IncomingMessage, ServerResponse } from "node:http";
 
-function mulberry32(seed: number) {
-  return function () {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+const mulberry32 = (seed: number) => {
+  let s = seed;
+  return () => {
+    s |= 0;
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
-}
+};
 
 const FIRST_NAMES = [
   "Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace", "Henry",
@@ -24,18 +25,18 @@ const LAST_NAMES = [
   "Clark", "Lewis", "Robinson", "Walker", "Hall", "Young", "Allen", "King",
 ];
 
-function generateUsers() {
+const generateUsers = () => {
   const rand = mulberry32(42);
   return Array.from({ length: 1000 }, (_, i) => ({
     id: `user-${String(i + 1).padStart(4, "0")}`,
     name: `${FIRST_NAMES[Math.floor(rand() * FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(rand() * LAST_NAMES.length)]}`,
   }));
-}
+};
 
-// Stable across requests in the same server process
 const USERS = generateUsers();
 
-export async function GET() {
+export const handleUsers = async (_req: IncomingMessage, res: ServerResponse) => {
   await new Promise((resolve) => setTimeout(resolve, 1500));
-  return NextResponse.json({ users: USERS });
-}
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify({ users: USERS }));
+};

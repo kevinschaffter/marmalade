@@ -1,5 +1,3 @@
-"use client";
-
 import { UserTable } from "@/components/UserTable";
 import type { UsersResponse, UserDetailsResponse } from "@/types/api";
 import { RefreshCounter } from "@/components/RefreshCounter";
@@ -16,7 +14,7 @@ export type TableRow = {
 //  "/api/users",
 //  "/api/user-details",
 
-export default function Page() {
+export const App = () => {
 
   const handleRowClick = (id: string) => {
     console.log("Selected user:", id);
@@ -60,4 +58,4 @@ export default function Page() {
       </div>
     </main>
   );
-}
+};

@@ -1,4 +1,4 @@
-import type { TableRow } from "./UserTable";
+import type { TableRow } from "@/src/App";
 
 // Simulates expensive per-row processing (e.g. complex serialisation, validation).
 // Runs a tight 20,000-iteration loop per row — intentionally slow.

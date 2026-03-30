@@ -1,22 +1,21 @@
-import { NextResponse } from "next/server";
+import type { IncomingMessage, ServerResponse } from "node:http";
 
-// Module-level counter — increments on every request.
-// Every 5th call (5, 10, 15...) returns a 500 error.
 let callCount = 0;
 
-function mulberry32(seed: number) {
-  return function () {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+const mulberry32 = (seed: number) => {
+  let s = seed;
+  return () => {
+    s |= 0;
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
-}
+};
 
 const ROLES = ["admin", "editor", "viewer", "moderator", "analyst"] as const;
 
-function generateDetails() {
+const generateDetails = () => {
   const rand = mulberry32(99);
   const baseDate = new Date("2022-01-01T00:00:00Z").getTime();
   const rangeMs = 2 * 365 * 24 * 60 * 60 * 1000;
@@ -26,21 +25,21 @@ function generateDetails() {
     role: ROLES[Math.floor(rand() * ROLES.length)],
     createdAt: new Date(baseDate + Math.floor(rand() * rangeMs)).toISOString(),
   }));
-}
+};
 
-// Stable across requests in the same server process
 const DETAILS = generateDetails();
 
-export async function GET() {
+export const handleUserDetails = async (_req: IncomingMessage, res: ServerResponse) => {
   callCount++;
 
   if (callCount % 5 === 0) {
-    return NextResponse.json(
-      { error: "Internal Server Error", message: "Simulated server failure" },
-      { status: 500 }
-    );
+    res.statusCode = 500;
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify({ error: "Internal Server Error", message: "Simulated server failure" }));
+    return;
   }
 
   await new Promise((resolve) => setTimeout(resolve, 1500));
-  return NextResponse.json({ details: DETAILS });
-}
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify({ details: DETAILS }));
+};
