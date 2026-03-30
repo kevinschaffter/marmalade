@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 type RefreshCounterProps = {
   intervalMs?: number;
@@ -6,19 +6,12 @@ type RefreshCounterProps = {
 
 export const RefreshCounter = ({ intervalMs = 5000 }: RefreshCounterProps) => {
   const [refreshCount, setRefreshCount] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setRefreshCount((prev) => prev + 1);
+    setInterval(() => {
+      setRefreshCount(refreshCount + 1);
     }, intervalMs);
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [intervalMs]);
+  }, [intervalMs, refreshCount]);
 
   return (
     <span className="text-xs text-gray-400 tabular-nums">
