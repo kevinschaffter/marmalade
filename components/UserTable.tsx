@@ -12,8 +12,8 @@ import { processRowForExport } from "./usersTable.utils";
 import SearchBox from "./SearchBox";
 import SortDropdown from "./SortDropdown";
 import Pagination from "./Pagination";
-import type { TableRow } from "@/src/App";
-import { useMockExpensiveRender } from "@/hooks/useMockExpensiveRender";
+import type { TableRow } from "../src/App";
+import { useMockExpensiveRender } from "../hooks/useMockExpensiveRender";
 
 const columnHelper = createColumnHelper<TableRow>();
 
