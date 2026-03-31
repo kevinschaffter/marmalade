@@ -6,7 +6,6 @@ import {
   flexRender,
   createColumnHelper,
   type Row,
-  noop,
 } from "@tanstack/react-table";
 import { processRowForExport } from "./usersTable.utils";
 
@@ -125,8 +124,8 @@ export const UserTable = memo(({ data, onRowClick }: UserTableProps) => {
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
       {/* Toolbar */}
       <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 bg-white">
-        <SearchBox value="" onChange={noop} />
-        <SortDropdown value="newest" onChange={noop} />
+        <SearchBox value="" onChange={() => {}} />
+        <SortDropdown value="newest" onChange={() => {}} />
         <div className="ml-auto flex items-center gap-3">
           <span className="text-xs text-gray-400">
             {table.getFilteredRowModel().rows.length.toLocaleString()} users
@@ -189,7 +188,7 @@ export const UserTable = memo(({ data, onRowClick }: UserTableProps) => {
         <Pagination
           pageIndex={0}
           pageCount={totalPages}
-          onPageChange={noop}
+          onPageChange={() => {}}
           pageSize={PAGE_SIZE}
           onPageSizeChange={() => {}}
         />

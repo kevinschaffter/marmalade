@@ -9,13 +9,14 @@ export type TableRow = {
   createdAt: string;
 };
 
-//  Fetch these two endpoints and massage the data into what the table expects.
+// Fetch these two endpoints and massage the data into what the table expects. 
+// Data from both endpoints are needed to construct TableRow.`
+
 //  The table should only include users that are is "api/users"
-//  "/api/users",
-//  "/api/user-details",
+//  "/api/users", => Return an array of objects of user IDs and names: UsersResponse
+//  "/api/user-details", => Returns array of objects of user details: UserDetailsResponse
 
 export const App = () => {
-
   const handleRowClick = (id: string) => {
     console.log("Selected user:", id);
   };
